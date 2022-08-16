@@ -68,21 +68,21 @@
     <div id="app">
         <form id="form" action="#">
             <div class="wrap">
-                <input id="idProduct" name="idProduct" type="number" placeholder="Введите id продукта" min="1" >
+                <input id="idProduct" name="idProduct" type="number" placeholder="Введите id продукта" min="1" required>
             </div>
             <div class="wrap">
-                <input id="title" name="title" type="text" placeholder="Изменить заголовок">
+                <input id="title" name="title" type="text" placeholder="Изменить заголовок" required>
             </div>
             <div class="wrap">
-                <input id="description" name="description" type="text" placeholder="Изменить описание">
+                <input id="description" name="description" type="text" placeholder="Изменить описание" required>
             </div>
             <div class="wrap">
                 <label for="thumbnail">Поменять главное изображение</label>
-                <input id="thumbnail" name="thumbnail" type="file" accept=".jpg, .png">
+                <input id="thumbnail" name="thumbnail" type="file" accept=".jpg, .png" required>
             </div>
             <div class="wrap">
                 <label for="images">Поменять изображения</label>
-                <input id="images" name="images" multiple type="file" accept=".jpg, .png">
+                <input id="images" name="images" multiple type="file" accept=".jpg, .png" required>
             </div>
             <div class="wrap">
                 <label for="method">Выберете http метод</label>
