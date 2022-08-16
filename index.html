@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #app input,
+    #app select {
+        width: 300px;
+        height: 40px;
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+        border: 1px solid rgb(51 51 51);
+    }
+
+    #app button {
+        width: 100px;
+        height: 40px;
+        border-radius: 5px;
+        outline: none;
+        background-color: #00bcd4;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    #content {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    #content .item {
+        max-width: 400px;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    #content img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;        
+    }
+
+    .wrap {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+<body>
+    <div id="app">
+        <form id="form" action="#">
+            <div class="wrap">
+                <input id="idProduct" name="idProduct" type="number" placeholder="Введите id продукта" min="1" >
+            </div>
+            <div class="wrap">
+                <input id="title" name="title" type="text" placeholder="Изменить заголовок">
+            </div>
+            <div class="wrap">
+                <input id="description" name="description" type="text" placeholder="Изменить описание">
+            </div>
+            <div class="wrap">
+                <label for="thumbnail">Поменять главное изображение</label>
+                <input id="thumbnail" name="thumbnail" type="file" accept=".jpg, .png">
+            </div>
+            <div class="wrap">
+                <label for="images">Поменять изображения</label>
+                <input id="images" name="images" multiple type="file" accept=".jpg, .png">
+            </div>
+            <div class="wrap">
+                <label for="method">Выберете http метод</label>
+                <select id="method">
+                    <option value="GET">Получить</option>
+                    <option value="POST">Добавить</option>
+                    <option value="PUT">Изменить</option>
+                    <option value="DELETE">Удалить</option>
+                </select>
+            </div>
+            
+            <button type="submit">Отправить</button>
+        </form>
+        <div id="content">
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="./main.js"></script>
+</html>
