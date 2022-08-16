@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         title: titleElem.value,
                         description: descriptionElem.value,
                         thumbnail: dataURL.toString(),
-                        images: "imagesElems.toString()"
+                        images: imagesElems.toString()
                     })
                         .then(function (response) {
                             console.log(response['data'])
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             title: titleElem.value,
                             description: descriptionElem.value,
                             thumbnail: dataURL.toString(),
-                            images: "imagesElems.toString()"
+                            images: imagesElems.toString()
                         })
                             .then(function (response) {
                                 console.log(response['data'])
