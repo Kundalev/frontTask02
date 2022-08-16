@@ -11,10 +11,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const descriptionElem = form.elements.description;
     const thumbnailElem = form.elements.thumbnail;
     const imagesElem = form.elements.images;
+    const hash = '13ddf6ae3b3c824719ce167c65d492c2'
 
     let currentMethod = "GET";
 
     let imagesElems = []
+
 
     idElem.disabled = false;
     titleElem.disabled = true;
@@ -23,11 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
     imagesElem.disabled = true;
 
 
-    function toDataURL(src, callback){
+    function toDataURL(src, callback) {
         let image = new Image();
         image.crossOrigin = 'Anonymous';
 
-        image.onload = function(){
+        image.onload = function () {
             let canvas = document.createElement('canvas');
             let context = canvas.getContext('2d');
             canvas.height = this.naturalHeight;
@@ -57,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
             data.forEach((item) => {
                 const div = document.createElement("div");
                 div.classList.add("item");
+                div.setAttribute('id', item.id)
                 div.innerHTML = `
             <div class="title">
                 <h3>${item.title}</h3>
@@ -79,11 +82,10 @@ document.addEventListener("DOMContentLoaded", function () {
             let arr = imagesElem.files;
             let i = 0
             for (i = 0; i < arr.length; ++i) {
-                toDataURL(window.URL.createObjectURL(arr[i]), function(dataURL){
+                toDataURL(window.URL.createObjectURL(arr[i]), function (dataURL) {
                     imagesElems.push(dataURL);
                 })
             }
-            console.log(imagesElems)
 
 
             switch (currentMethod) {
@@ -97,32 +99,45 @@ document.addEventListener("DOMContentLoaded", function () {
                         });
                     break
                 case "POST":
-                    toDataURL(window.URL.createObjectURL(thumbnailElem.files[0]), function(dataURL){
+                    toDataURL(window.URL.createObjectURL(thumbnailElem.files[0]), function (dataURL) {
 
-                    axios.post(url + '/products/add', {
-                        title: titleElem.value,
-                        description: descriptionElem.value,
-                        thumbnail: dataURL.toString(),
-                        images: imagesElems.toString()
-                    })
-                        .then(function (response) {
-                            console.log(response['data'])
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        })
-                    });
-                    break
-                case "PUT":
-                    toDataURL(window.URL.createObjectURL(thumbnailElem.files[0]), function(dataURL) {
-                        axios.put(url + '/products/' + idElem.value, {
-                            title: titleElem.value,
-                            description: descriptionElem.value,
-                            thumbnail: dataURL.toString(),
-                            images: imagesElems.toString()
+                        axios.post(url + '/products/add', {
+                            title: CryptoJS.AES.encrypt(titleElem.value, hash).toString(),
+                            description: CryptoJS.AES.encrypt(descriptionElem.value, hash).toString(),
+                            thumbnail: CryptoJS.AES.encrypt(dataURL.toString(), hash).toString(),
+                            images: CryptoJS.AES.encrypt(imagesElems.toString(), hash).toString()
                         })
                             .then(function (response) {
                                 console.log(response['data'])
+                                console.log(CryptoJS.AES.decrypt(response['data']['title'], hash).toString(CryptoJS.enc.Utf8))
+                                console.log(CryptoJS.AES.decrypt(response['data']['description'], hash).toString(CryptoJS.enc.Utf8))
+                                console.log(CryptoJS.AES.decrypt(response['data']['thumbnail'], hash).toString(CryptoJS.enc.Utf8))
+                                console.log(CryptoJS.AES.decrypt(response['data']['images'], hash).toString(CryptoJS.enc.Utf8))
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            })
+                    });
+                    break
+                case "PUT":
+                    toDataURL(window.URL.createObjectURL(thumbnailElem.files[0]), function (dataURL) {
+                        axios.put(url + '/products/' + idElem.value, {
+                            title: CryptoJS.AES.encrypt(titleElem.value, hash).toString(),
+                            description: CryptoJS.AES.encrypt(descriptionElem.value, hash).toString(),
+                            thumbnail: CryptoJS.AES.encrypt(dataURL.toString(), hash).toString(),
+                            images: CryptoJS.AES.encrypt(imagesElems.toString(), hash).toString()
+                        })
+                            .then(function (response) {
+                                console.log(response['data'])
+                                console.log(CryptoJS.AES.decrypt(response['data']['title'], hash).toString(CryptoJS.enc.Utf8))
+                                console.log(CryptoJS.AES.decrypt(response['data']['description'], hash).toString(CryptoJS.enc.Utf8))
+                                console.log(CryptoJS.AES.decrypt(response['data']['thumbnail'], hash).toString(CryptoJS.enc.Utf8))
+                                console.log(CryptoJS.AES.decrypt(response['data']['images'], hash).toString(CryptoJS.enc.Utf8))
+                                let item = document.getElementById(idElem.value);
+                                item.querySelector('h3').textContent = titleElem.value;
+                                item.querySelector('img').src = dataURL.toString();
+                                item.querySelector('p').textContent = descriptionElem.value;
+
                             })
                             .catch(function (error) {
                                 console.log(error);
@@ -130,6 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                     break
                 case "DELETE":
+                    let item = document.getElementById(idElem.value);
+                    item.remove();
                     axios.delete(url + '/products/' + idElem.value)
                         .then(function (response) {
                             console.log(response['data'])
